@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public class UserDaoService {
-    public static List<User> users = new ArrayList<User>();
+    public static final List<User> users = new ArrayList<User>();
 
     private static int usersCount = 3;
 
