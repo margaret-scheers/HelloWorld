@@ -15,6 +15,7 @@ import java.util.Date;
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
@@ -37,9 +38,10 @@ class RestfulWebServicesApplicationTests {
         request.header("content-type", MediaType.APPLICATION_JSON_VALUE);
         request.body(new User(105, "name5", new Date()));
         Response response = request.post("/users").andReturn();
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-        //String location = response.getHeader("location");
-        //assertTrue(String.format("%s should end with /users/5", location), location.endsWith("/users/5"));
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode());
+        String location = response.getHeader("location");
+        assertTrue(String.format("%s should end with /users/105", location), location.endsWith("/users/105"));
     }
+
 
 }
