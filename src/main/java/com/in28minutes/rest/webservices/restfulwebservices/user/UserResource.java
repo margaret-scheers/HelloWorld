@@ -61,6 +61,7 @@ public class UserResource {
 
     @PostMapping("/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user, HttpServletRequest request) throws URISyntaxException {
+
         User savedUser = service.save(user);
         StringBuffer requestUrl = request.getRequestURL();
         URI location= new URI(requestUrl.append("/").append(savedUser.getId()).toString());

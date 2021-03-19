@@ -1,6 +1,7 @@
 package com.in28minutes.rest.webservices.restfulwebservices.user;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -17,8 +18,17 @@ class UserResourceTest {
     @Test
     void userCreate() throws URISyntaxException {
         UserDaoService service = mock(UserDaoService.class);
-        User utest = new User(101, "utest", new Date());
-        when(service.save(utest)).thenReturn(utest);
+        final Date birthdate = new Date();
+        User utest = new User(101, "utest", birthdate);
+        when(service.save(argThat(new ArgumentMatcher<User>() {
+            @Override
+            public boolean matches(User user) {
+                assertEquals(101, user.getId());
+                assertEquals("utest", user.getName());
+                assertEquals(birthdate, user.getBirthdate());
+                return true;
+            }
+        }))).thenReturn(utest);
 
         UserResource userResource = new UserResource(service);
 
