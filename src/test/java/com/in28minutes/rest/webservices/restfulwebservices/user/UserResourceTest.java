@@ -20,14 +20,11 @@ class UserResourceTest {
         UserDaoService service = mock(UserDaoService.class);
         final Date birthdate = new Date();
         User utest = new User(101, "utest", birthdate);
-        when(service.save(argThat(new ArgumentMatcher<User>() {
-            @Override
-            public boolean matches(User user) {
-                assertEquals(101, user.getId());
-                assertEquals("utest", user.getName());
-                assertEquals(birthdate, user.getBirthdate());
-                return true;
-            }
+        when(service.save(argThat(user -> {
+            assertEquals(101, user.getId());
+            assertEquals("utest", user.getName());
+            assertEquals(birthdate, user.getBirthdate());
+            return true;
         }))).thenReturn(utest);
 
         UserResource userResource = new UserResource(service);
