@@ -21,14 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserJpaResource {
 
     @Autowired
-    private UserDaoService service;
-
-    @Autowired
     private UserRepository repository;
-
-    public UserJpaResource(UserDaoService service) {
-        this.service = service;
-    }
 
     @GetMapping("/jpa/users")
     public List<User> retrieveAllUsers() {
@@ -58,17 +51,14 @@ public class UserJpaResource {
     @DeleteMapping("/jpa/users/{id}")
     public void deleteUser(@PathVariable int id) {
 
-        User user = service.deleteById(id);
-        if (user == null) {
-            throw new UserNotFoundException("id-" + id);
-        }
+        repository.deleteById(id);
         return;
     }
 
     @PostMapping("/jpa/users")
     public ResponseEntity<Object> createUser(@Valid @RequestBody User user, HttpServletRequest request) throws URISyntaxException {
 
-        User savedUser = service.save(user);
+        User savedUser = repository.save(user);
         StringBuffer requestUrl = request.getRequestURL();
         URI location= new URI(requestUrl.append("/").append(savedUser.getId()).toString());
 
